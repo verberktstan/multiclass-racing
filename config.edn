@@ -1,0 +1,10 @@
+{:classes
+ {:gti-f #{"UF1", "XFG"}, :gti-r #{"XRG"}, :tb4 #{"LX4" "RB4" "FXO" "XRT"},
+  :rf6 #{"LX6" "RAC" "FZ5"}, :gtr-f #{"UFR" "XFR"}, :gtr #{"FXR" "XRR" "FZR"},
+  :owd #{"MRT" "FBM"}, :owc #{"FOX"}, :owb #{"FO8"}, :owa #{"BF1"}}
+ 
+ :class-xp
+ {0 :gti-f, 25 :gti-r, 50 :tb4, 75 :rf6, 100 :gtr-f, 125 :gtr, 150 :owd, 175 :owc, 200 :owb 225 :owa}
+ 
+ :scores
+ [8 5 3 2 1 0.62 0.38 0.23]}

@@ -1,0 +1,2 @@
+{:deps
+ {clj-insim {:mvn/version "0.2.0-SNAPSHOT"}}}
