@@ -94,15 +94,12 @@
     (register-and-allow ucid)))
 
 (comment
-  (def lfs-client
-    (clj-insim/client dispatch))
+  ;; Define the lfs-client with the dispatch function
+  (def lfs-client (clj-insim/client dispatch))
 
+  ;; Stop the lfs-client
   (clj-insim/stop! lfs-client)
 
+  ;; Load all persisted racers
   (racers/reload!)
-
-  @results
-  (clj-insim/get-player)
-  
-  (reset! results nil)
 )
