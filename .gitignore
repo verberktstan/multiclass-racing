@@ -1,3 +1,4 @@
 .cpcache/
 .nrepl-port
 racers.edn
+secrets.edn

@@ -4,10 +4,13 @@
             [clj-insim.models.packet :as packet]
             [mcr.racers :as racers]
             [mcr.results :as results]
+            [mcr.commands :refer [commands]]
             [clojure.set :as set]
             [clojure.string :as str]))
 
-(def ^:private CONFIG (read-string (slurp "config.edn")))
+(def slurp-string (comp read-string slurp))
+
+(def ^:private CONFIG (slurp-string "config.edn"))
 
 ;; Specification of car classes
 (def ^:private CLASSES
@@ -74,6 +77,9 @@
     (when user-name
       (register-and-allow (:data header) user-name))))
 
+(defn- th [n]
+  (str n (get {1 "st" 2 "nd" 3 "rd"} n "th")))
+
 (defmethod dispatch :res [{::packet/keys [header body]}]
   (let [{:keys [car-name] :as player} (clj-insim/get-player (:data header))
         {:keys [user-name result-num confirmation-flags]} body
@@ -86,7 +92,16 @@
            (non-ai? player)
            (contains? confirmation-flags :confirmed))
       (racers/add-xp! user-name xp-score)
-      (packets/mtc (str user-name " scored " xp-score " XP!")))))
+      (packets/mtc (str user-name " became " (th (inc class-result)) " in class and scored " xp-score " XP!")))))
+
+(defmethod dispatch :mso [{::packet/keys [header body]}]
+  (let [msg (subs (:message body) (:text-start body))
+        ucid (:connection-id body)
+        user-name (get-user-name ucid)
+        {:keys [xp] :as racer} (racers/get-racer user-name)
+        f (get commands msg)]
+    (when f
+      (f {:ucid ucid, :user-name user-name, :xp xp, :cars (cars-for-xp xp)}))))
 
 (defmethod dispatch :tiny [_]
   (racers/persist!)
@@ -95,7 +110,7 @@
 
 (comment
   ;; Define the lfs-client with the dispatch function
-  (def lfs-client (clj-insim/client dispatch))
+  (def lfs-client (clj-insim/client {} (packets/insim-init (slurp-string "secrets.edn")) dispatch))
 
   ;; Stop the lfs-client
   (clj-insim/stop! lfs-client)

@@ -1,2 +1,3 @@
 {:deps
- {clj-insim {:mvn/version "0.2.0-SNAPSHOT"}}}
+ {;clj-insim {:mvn/version "0.2.0-SNAPSHOT"}
+  clj-insim {:local/root "/Users/stanverberkt/stanverberkt/clj-insim"}}}
